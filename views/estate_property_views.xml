@@ -6,33 +6,60 @@
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
                 <form string="Property">
-                   <sheet>
+                    <header>
+                        <button name="change_status_to_sold" type="object" string="Sold"/>
+                        <button name="change_status_to_cancelled" type="object" string="Cancelled"/>
+                    </header>
+                    <sheet>
                        <h1>
                            <field name="name" nolabel="1"/>
                        </h1>
+                       <p><b>Tags: </b><field name="property_tag_ids" widget="many2many_tags"/></p>
                        <group>
                            <group name="left_main_group">
-                             <field name="postcode"/>
-                             <field name="date_available" string="Available From"/>
+                               <field name="status"/>
+                               <field name="property_type_id"/>
+                               <field name="postcode"/>
+                               <field name="date_available" string="Available From"/>
                            </group>
                            <group name="right_main_group">
-                             <field name="expected_price"/>
-                             <field name="selling_price"/>
+                               <field name="expected_price"/>
+                               <field name="best_price"/>
+                               <field name="selling_price" readonly="1"/>
                            </group>
-                           <notebook>
-                               <page string="Description" name="description">
-                                   <group>
-                                       <field name="description" string="Description"/>
-                                       <field name="bedrooms" string="Bedrooms"/>
-                                       <field name="living_area" string="Living Area (sqm)"/>
-                                       <field name="facades" string="Facades"/>
-                                       <field name="garden" string="Garden"/>
-                                       <field name="garden_area" string="Garden Area (sqm)"/>
-                                       <field name="garden_orientation" string="Garden Orientation"/>
-                                   </group>
-                               </page>
-                           </notebook>
                        </group>
+                       <notebook>
+                           <page string="Description" name="description">
+                               <group>
+                                   <field name="description" string="Description"/>
+                                   <field name="bedrooms" string="Bedrooms"/>
+                                   <field name="living_area" string="Living Area (sqm)"/>
+                                   <field name="facades" string="Facades"/>
+                                   <field name="garden" string="Garden"/>
+                                   <field name="garden_area" string="Garden Area (sqm)"/>
+                                   <field name="garden_orientation" string="Garden Orientation"/>
+                               </group>
+                           </page>
+                           <page string="Offers">
+                               <field name="offer_ids" default="{'default_model_id': self}" nolabel="1">
+                                   <tree create="1" editable="bottom">
+                                        <field name="price"/>
+                                        <field name="partner_id"/>
+                                        <field name="validity" string="Validity (days)"/>
+                                        <field name="deadline_date"/>
+                                        <button name="accept_offer" string="Accept" type="object" icon="fa-check"/>
+                                        <button name="refuse_offer" string="Refuse" type="object" icon="fa-times"/>
+                                        <field name="status"/>
+                                   </tree>
+                               </field>
+                           </page>
+                           <page string="Other info">
+                               <group>
+                                   <field name="user_id"/>
+                                   <field name="partner_id"/>
+                               </group>
+                           </page>
+                       </notebook>
                     </sheet>
                 </form>
             </field>
@@ -59,10 +86,10 @@
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
                 <search string="Search property">
-                    <field name="name" domain="[('name','ilike',self)]"/>
-                    <field name="postcode" domain="[('postcode','ilike',self)]"/>
-                    <field name="expected_price" domain="[('expected_price','>=',self)]" string="Expected price greater than"/>
-                    <field name="selling_price" domain="[('selling_price','>=',self)]" string="Selling price greater than"/>
+                    <field name="name" filter_domain="[('name','ilike',self)]"/>
+                    <field name="postcode" filter_domain="[('postcode','ilike',self)]"/>
+                    <field name="expected_price" filter_domain="[('expected_price','>=',self)]" string="Expected price greater than"/>
+                    <field name="selling_price" filter_domain="[('selling_price','>=',self)]" string="Selling price greater than"/>
                     <filter name="expected_price" domain="[('expected_price','>=',1000)]" string="Expected price greater than 1000"/>
                     <filter name="selling_price" domain="[('selling_price','>=',1000)]" string="Selling price greater than 1000"/>
                     <group expand="0" string="Group By">
