@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <record id="estate_property_form" model="ir.ui.view">
             <field name="name">estate.property.form</field>
             <field name="model">estate.property</field>
@@ -59,11 +58,15 @@
             <field name="name">estate.property.search</field>
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
-                <search string="Estate property">
-                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','=like',str(self)+'%')]" string="Search property name abc:"/>
-                    <field name="postcode"/>
-                    <filter string="Expected price more than 1000" name="expected_price" domain="[('expected_price','>=','10000')]"/>
+                <search string="Search property">
+                    <field name="name" domain="[('name','ilike',self)]"/>
+                    <field name="postcode" domain="[('postcode','ilike',self)]"/>
+                    <field name="expected_price" domain="[('expected_price','>=',self)]" string="Expected price greater than"/>
+                    <field name="selling_price" domain="[('selling_price','>=',self)]" string="Selling price greater than"/>
+                    <filter name="expected_price" domain="[('expected_price','>=',1000)]" string="Expected price greater than 1000"/>
+                    <filter name="selling_price" domain="[('selling_price','>=',1000)]" string="Selling price greater than 1000"/>
                     <group expand="0" string="Group By">
+                        <filter name="postcode" domain="" context="{'group_by':'postcode'}"/>
                         <filter string="Bedrooms" name="bedrooms" domain="" context="{'group_by':'bedrooms'}"/>
                     </group>
                 </search>
