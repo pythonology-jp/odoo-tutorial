@@ -9,16 +9,16 @@
                     <header>
                         <button name="change_status_to_sold" type="object" string="Sold"/>
                         <button name="change_status_to_cancelled" type="object" string="Cancelled"/>
+                        <field name="status" widget="statusbar" statusbar_visible="open,sold,cancelled"/>
                     </header>
                     <sheet>
                        <h1>
                            <field name="name" nolabel="1"/>
                        </h1>
-                       <p><b>Tags: </b><field name="property_tag_ids" widget="many2many_tags"/></p>
+                       <p><b>Tags: </b><field name="property_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/></p>
                        <group>
                            <group name="left_main_group">
-                               <field name="status"/>
-                               <field name="property_type_id"/>
+                               <field name="property_type_id" options="{'no_create': True, 'no_open': True}"/>
                                <field name="postcode"/>
                                <field name="date_available" string="Available From"/>
                            </group>
@@ -36,20 +36,20 @@
                                    <field name="living_area" string="Living Area (sqm)"/>
                                    <field name="facades" string="Facades"/>
                                    <field name="garden" string="Garden"/>
-                                   <field name="garden_area" string="Garden Area (sqm)"/>
-                                   <field name="garden_orientation" string="Garden Orientation"/>
+                                   <field name="garden_area" string="Garden Area (sqm)" attrs="{'invisible': [('garden','=',False)]}"/>
+                                   <field name="garden_orientation" string="Garden Orientation" attrs="{'invisible': [('garden','=',False)]}"/>
                                </group>
                            </page>
                            <page string="Offers">
                                <field name="offer_ids" default="{'default_model_id': self}" nolabel="1">
-                                   <tree create="1" editable="bottom">
+                                   <tree create="1" editable="bottom" decoration-danger="status=='refused'">
                                         <field name="price"/>
                                         <field name="partner_id"/>
                                         <field name="validity" string="Validity (days)"/>
                                         <field name="deadline_date"/>
                                         <button name="accept_offer" string="Accept" type="object" icon="fa-check"/>
                                         <button name="refuse_offer" string="Refuse" type="object" icon="fa-times"/>
-                                        <field name="status"/>
+                                        <field name="status" invisible="1"/>
                                    </tree>
                                </field>
                            </page>
@@ -90,7 +90,7 @@
                     <field name="postcode" filter_domain="[('postcode','ilike',self)]"/>
                     <field name="expected_price" filter_domain="[('expected_price','>=',self)]" string="Expected price greater than"/>
                     <field name="selling_price" filter_domain="[('selling_price','>=',self)]" string="Selling price greater than"/>
-                    <filter name="expected_price" domain="[('expected_price','>=',1000)]" string="Expected price greater than 1000"/>
+                    <filter name="expected_price_greater_than_1000" domain="[('expected_price','>=',1000)]" string="Expected price greater than 1000"/>
                     <filter name="selling_price" domain="[('selling_price','>=',1000)]" string="Selling price greater than 1000"/>
                     <group expand="0" string="Group By">
                         <filter name="postcode" domain="" context="{'group_by':'postcode'}"/>
@@ -105,6 +105,7 @@
             <field name="res_model">estate.property</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="estate_property_search"/>
+            <field name="context">{'search_default_expected_price': 10}</field>
         </record>
     </data>
 </odoo>

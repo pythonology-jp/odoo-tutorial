@@ -5,6 +5,7 @@ from odoo.exceptions import ValidationError, UserError
 class PropertyModel(models.Model):
     _name = 'estate.property'
     _description = 'Property Description'
+    _order = 'id desc'
 
     name = fields.Char()
     description = fields.Text()
@@ -28,7 +29,7 @@ class PropertyModel(models.Model):
         ('open', 'Open'),
         ('sold', 'Sold'),
         ('cancelled', 'Cancelled'),
-    ], default='open')
+    ], required=True, default='open')
 
     # Compute fields
     total_area = fields.Integer(compute='_compute_total_area', inverse='_inverse_total_area')

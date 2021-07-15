@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="estate_property_type_form" model="ir.ui.view">
+            <field name="name">estate.property.type.form</field>
+            <field name="model">estate.property.type</field>
+            <field name="arch" type="xml">
+                <form string="Property type">
+                    <sheet>
+                       <h1>
+                           <field name="name" nolabel="1"/>
+                       </h1>
+                       <notebook>
+                           <page string="Properties">
+                               <field name="property_ids" default="{'default_model_id': self}" nolabel="1">
+                                   <tree>
+                                        <field name="name" string="Title"/>
+                                        <field name="expected_price"/>
+                                        <field name="status"/>
+                                   </tree>
+                               </field>
+                           </page>
+                       </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="estate_property_type_list" model="ir.ui.view">
+            <field name="name">estate.property.type.list</field>
+            <field name="model">estate.property.type</field>
+            <field name="arch" type="xml">
+                <tree create="1" delete="1" string="Property types">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" string="Title"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="estate_property_type_action" model="ir.actions.act_window">
             <field name="name">Property Type</field>
             <field name="res_model">estate.property.type</field>
