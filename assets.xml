@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="qunit_suite_tests" name="estate tests" inherit_id="web.qunit_suite_tests">
+        <xpath expr="//script[last()]" position="after">
+            <script type="text/javascript" src="/estate/static/tests/utils_tests.js"/>
+        </xpath>
+    </template>
+</odoo>
