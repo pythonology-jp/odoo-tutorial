@@ -1,4 +1,3 @@
 # estate
-Odoo tutorial module
 
-check 
+Odoo tutorial module
