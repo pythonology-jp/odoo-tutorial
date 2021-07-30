@@ -14,6 +14,8 @@ class PropertyModel(models.Model):
     expected_price = fields.Float()
     selling_price = fields.Float()
     bedrooms = fields.Integer()
+    number_floor = fields.Integer(required = False)
+    total_room = fields.Integer(required=False)
     living_area = fields.Integer()
     facades = fields.Integer()
     garage = fields.Boolean()
@@ -30,6 +32,14 @@ class PropertyModel(models.Model):
         ('sold', 'Sold'),
         ('cancelled', 'Cancelled'),
     ], required=True, default='open')
+
+    type_roof = fields.Selection(selection=[
+        ('stone coated steel', 'Stone Coated Steel'),
+        ('metal roofing', 'Metal roofing'),
+        ('rubber slate', 'Rubber Slate'),
+        ('clay and concrete tiles', 'Clay and Concrete Tiles'),
+        ('solar tiles', 'Solar Tiles'),
+    ], required=False, default='solar tiles')
 
     # Compute fields
     total_area = fields.Integer(compute='_compute_total_area', inverse='_inverse_total_area')
@@ -49,14 +59,14 @@ class PropertyModel(models.Model):
          'The selling price should be greater than 0.'),
     ]
 
-    @api.depends('living_area', 'garden_area')
+    @api.depends('living_area', 'garden_area', 'number_floor')
     def _compute_total_area(self):
         for record in self:
-            record.total_area = record.living_area + record.garden_area
+            record.total_area = record.living_area * record.number_floor + record.garden_area
 
     def _inverse_total_area(self):
         for record in self:
-            record.garden_area = record.total_area - record.living_area
+            record.garden_area = record.total_area - record.living_area * record.number_floor
 
     @api.depends('offer_ids.price')
     def _compute_best_price(self):

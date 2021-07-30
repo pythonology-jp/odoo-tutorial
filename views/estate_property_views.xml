@@ -29,10 +29,14 @@
                            </group>
                        </group>
                        <notebook>
+
                            <page string="Description" name="description">
                                <group>
                                    <field name="description" string="Description"/>
+                                   <field name="number_floor" string="Number of floor"/>
+                                   <field name="total_room" string="Total of room"/>
                                    <field name="bedrooms" string="Bedrooms"/>
+                                   <field name="type_roof" string="Type Of Roof"/>
                                    <field name="living_area" string="Living Area (sqm)"/>
                                    <field name="facades" string="Facades"/>
                                    <field name="garden" string="Garden"/>
@@ -40,6 +44,7 @@
                                    <field name="garden_orientation" string="Garden Orientation" attrs="{'invisible': [('garden','=',False)]}"/>
                                </group>
                            </page>
+
                            <page string="Offers">
                                <field name="offer_ids" default="{'default_model_id': self}" nolabel="1">
                                    <tree create="1" editable="bottom" decoration-danger="status=='refused'">
@@ -53,12 +58,14 @@
                                    </tree>
                                </field>
                            </page>
+
                            <page string="Other info">
                                <group>
                                    <field name="user_id"/>
                                    <field name="partner_id"/>
                                </group>
                            </page>
+
                        </notebook>
                     </sheet>
                 </form>
@@ -72,7 +79,11 @@
                 <tree create="1" delete="1" string="Properties">
                     <field name="name" string="Title"/>
                     <field name="postcode"/>
+                    <field name="number_floor" string="Number Of Floor"/>
+                    <field name="total_room" string="Total Of Room"/>
                     <field name="bedrooms"/>
+                    <field name="type_roof"/>
+                    <field name="total_area" string="Total Area (sqm)"/>
                     <field name="living_area" string="Living Area (sqm)"/>
                     <field name="expected_price"/>
                     <field name="selling_price"/>
@@ -88,14 +99,21 @@
                 <search string="Search property">
                     <field name="name" filter_domain="[('name','ilike',self)]"/>
                     <field name="postcode" filter_domain="[('postcode','ilike',self)]"/>
+                    <field name="type_roof" filter_domain="[('type_roof', 'ilike', self)]"/>
+
                     <field name="expected_price" filter_domain="[('expected_price','>=',self)]" string="Expected price greater than"/>
                     <field name="selling_price" filter_domain="[('selling_price','>=',self)]" string="Selling price greater than"/>
+
                     <filter name="expected_price_greater_than_1000" domain="[('expected_price','>=',1000)]" string="Expected price greater than 1000"/>
                     <filter name="selling_price" domain="[('selling_price','>=',1000)]" string="Selling price greater than 1000"/>
+                    <filter name="number_floor" domain= "[('number_floor', '>=', 10)]" string="Number of floors greater than 10"/>
+
                     <group expand="0" string="Group By">
                         <filter name="postcode" domain="" context="{'group_by':'postcode'}"/>
                         <filter string="Bedrooms" name="bedrooms" domain="" context="{'group_by':'bedrooms'}"/>
+                        <filter string="Type Of Roof" name="type_roof" domain="" context="{'group_by':'type_roof'}"/>
                     </group>
+
                 </search>
             </field>
         </record>
